@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Werkprogramma Vergunningbeoordeling</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Material Icons CDN for extra visual bling -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #f7b801;
+            --danger: #e03d31;
+            --success: #49a447;
+            --medium: #ffa800;
+            --light: #eef2f9;
+            --grey: #b0b8c2;
+            --card-bg: #fff;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: #f4f7fb;
+            color: #222;
+            min-height: 100vh;
+        }
+        header {
+            background: var(--primary);
+            color: #fff;
+            padding: 1.6em 2em 1.3em 2em;
+            font-size: 1.7em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: 0 2px 8px #001e4038;
+        }
+        .header-logo {
+            font-size: 2.1em;
+            margin-right: 0.7em;
+            vertical-align: -0.2em;
+        }
+        .info-bar {
+            background: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 1.2em 2.5em;
+            font-size: 1.08em;
+            border-bottom: 2.2px solid #dde2ea;
+        }
+        .info-group span {
+            display: inline-block;
+            margin-right: 2em;
+        }
+        .status-badge {
+            font-weight: bold;
+            padding: 0.28em 1em;
+            border-radius: 14px;
+            color: #fff;
+            background: #bbb;
+            font-size: 1em;
+            margin-left: 0.8em;
+            display: inline-block;
+        }
+        .status-nieuw { background: var(--primary);}
+        .status-inbehandeling { background: var(--accent); color: #212529;}
+        .status-afgerond { background: var(--success);}
+        .status-geweigerd { background: var(--danger);}
+        .status-herbeoordeling { background: var(--medium); color: #212529;}
+        .metrics-bar {
+            display: flex;
+            gap: 2em;
+            margin-top: 1.2em;
+            margin-bottom: 2em;
+        }
+        .metric-card {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 9px;
+            box-shadow: 0 3px 16px 0 #00336612;
+            padding: 1.5em 1.7em;
+            display: flex;
+            align-items: center;
+            gap: 1em;
+        }
+        .metric-icon {
+            font-size: 2.4em;
+            color: var(--primary);
+            margin-right: 0.2em;
+        }
+        .metric-label {
+            color: #444;
+            font-size: 1.08em;
+            margin-bottom: 0.18em;
+        }
+        .metric-value {
+            font-size: 1.38em;
+            font-weight: bold;
+        }
+        .dashboard-flex {
+            display: flex;
+            gap: 2.5em;
+            align-items: flex-start;
+        }
+        .left-col, .right-col {
+            flex: 1;
+        }
+        .right-col {
+            min-width: 390px;
+            max-width: 490px;
+        }
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 11px;
+            box-shadow: 0 5px 30px #00336616;
+            margin-bottom: 2.3em;
+            padding: 2em 2em 1.4em 2em;
+        }
+        .section-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+            color: var(--primary);
+            margin-bottom: 1.2em;
+        }
+        .spacer {
+            flex: 1;
+        }
+        .filters {
+            margin: 1em 0 2em 0;
+            display: flex;
+            gap: 1.5em;
+            flex-wrap: wrap;
+        }
+        .filters label {
+            font-size: 0.96em;
+            color: #3d4056;
+            margin-right: 0.3em;
+        }
+        .filters select {
+            margin-right: 0.4em;
+            padding: 0.32em 0.8em;
+            border-radius: 6px;
+            border: 1.3px solid #b6bcc5;
+            font-size: 1.02em;
+        }
+        .charts-row {
+            display: flex;
+            gap: 2.4em;
+            align-items: flex-end;
+        }
+        .risk-bar-chart {
+            width: 330px;
+            height: 220px;
+        }
+        .spider-diagram {
+            width: 240px;
+            height: 240px;
+        }
+        .legend {
+            display: flex;
+            align-items: center;
+            gap: 1.7em;
+            margin-top: 0.7em;
+            font-size: 0.97em;
+        }
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+        }
+        .legend-box {
+            display: inline-block;
+            width: 1.2em; height: 1.2em;
+            margin-right: 0.5em;
+            border-radius: 3px;
+            vertical-align: middle;
+        }
+        .bar-red { background: var(--danger); }
+        .bar-orange { background: var(--medium);}
+        .bar-green { background: var(--success);}
+        .accordion {
+            margin: 2em 0;
+        }
+        .accordion-item {
+            margin-bottom: 1.3em;
+            border-radius: 10px;
+            border: 1.7px solid #e0e0e0;
+            overflow: hidden;
+            box-shadow: 0 3px 12px 0 #0033660c;
+            background: #fcfcfd;
+        }
+        .accordion-header {
+            background: #f6fafd;
+            cursor: pointer;
+            padding: 1.1em 1.7em 1.1em 2.4em;
+            font-size: 1.1em;
+            font-weight: 600;
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+            border-left: 5px solid var(--primary);
+        }
+        .accordion-header .expand-icon {
+            font-size: 1.18em;
+            margin-right: 1.2em;
+            transition: transform 0.22s;
+            color: var(--grey);
+        }
+        .accordion-header .theme-icon {
+            font-size: 1.15em;
+            margin-right: 0.8em;
+            color: var(--accent);
+        }
+        .accordion-item.open .accordion-header {
+            background: #eaf3fa;
+            border-left: 7px solid var(--accent);
+        }
+        .accordion-item.open .expand-icon {
+            transform: rotate(90deg);
+            color: var(--primary);
+        }
+        .accordion-content {
+            background: #fafbfc;
+            display: none;
+            padding: 2.5em 2.8em 1.8em 2.8em;
+            border-top: 1.5px solid #e0e0e0;
+            animation: fadeIn 0.7s;
+        }
+        .accordion-item.open .accordion-content {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0;}
+            to { opacity: 1;}
+        }
+        .theme-context {
+            color: #576485;
+            font-size: 1em;
+            margin-bottom: 1.2em;
+            padding-bottom: 0.5em;
+            border-bottom: 1px dashed #d2e2f1;
+        }
+        .applicant-answers {
+            margin-bottom: 1.1em;
+        }
+        .question-block {
+            margin-bottom: 1.2em;
+        }
+        .applicant-answer {
+            background: #f6ebc1;
+            padding: 0.7em 1em;
+            border-radius: 7px;
+            margin-bottom: 0.6em;
+            font-size: 0.98em;
+            border-left: 4px solid var(--accent);
+        }
+        .score-label {
+            font-size: 0.95em;
+            color: var(--medium);
+            margin-left: 0.7em;
+        }
+        .reviewer-row {
+            display: flex;
+            gap: 1.5em;
+            align-items: center;
+            margin-bottom: 0.7em;
+        }
+        .remark-field {
+            width: 80%;
+            padding: 0.7em;
+            border-radius: 5px;
+            border: 1.4px solid #c6cad0;
+            margin-top: 0.3em;
+            font-size: 1em;
+        }
+        .review-section {
+            margin: 1.1em 0 0.8em 0;
+        }
+        .review-label {
+            margin-right: 0.9em;
+            font-weight: 500;
+            color: #003366b0;
+        }
+        .review-status-badge {
+            padding: 0.23em 1em;
+            border-radius: 11px;
+            font-size: 1em;
+            color: #fff;
+            background: #bbb;
+            margin-left: 0.5em;
+        }
+        .review-status-goedgekeurd { background: var(--success);}
+        .review-status-afgekeurd { background: var(--danger);}
+        .review-status-niet { background: var(--accent); color: #212529;}
+        .reviewer-ctrl-group label { margin-right: 0.5em;}
+        .reviewer-ctrl-group select {
+            padding: 0.3em 1em;
+            border-radius: 6px;
+            border: 1px solid #b6bcc5;
+            margin-right: 0.5em;
+        }
+        .reviewer-ctrl-group input[type=checkbox] {
+            accent-color: var(--primary);
+            margin-right: 0.5em;
+        }
+        .reviewer-meta {
+            font-size: 0.96em;
+            color: #6b747d;
+            margin-top: 0.2em;
+            margin-bottom: 0.6em;
+        }
+        .reviewer-flow {
+            margin-top: 0.9em;
+            padding-top: 0.7em;
+            border-top: 1px dashed #d2e2f1;
+        }
+        .go-indicator {
+            margin: 3em 0 1.5em 0;
+            text-align: center;
+        }
+        .go-indicator .go-status {
+            font-size: 2.1em;
+            font-weight: 700;
+            padding: 0.6em 2em;
+            border-radius: 32px;
+            display: inline-block;
+            color: #fff;
+            box-shadow: 0 0 15px #00336622;
+            letter-spacing: 0.09em;
+        }
+        .go-status.go {
+            background: var(--success);
+            box-shadow: 0 0 8px #49a44755;
+        }
+        .go-status.nogo {
+            background: var(--danger);
+            box-shadow: 0 0 8px #e03d3155;
+        }
+        .go-status.pending {
+            background: var(--accent);
+            color: #222;
+        }
+        .bookmark-bar {
+            text-align: right;
+            margin-bottom: 1.5em;
+        }
+        .bookmark-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 7px;
+            color: #333;
+            font-weight: bold;
+            padding: 0.44em 1.1em;
+            margin-left: 0.7em;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 6px #ffd86e1c;
+            transition: background 0.13s;
+        }
+        .bookmark-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .warning {
+            color: var(--danger);
+            font-size: 1.12em;
+            font-weight: bold;
+            margin: 2em 0 0.5em 0;
+            text-align: center;
+        }
+        .status-history {
+            background: #f3f7fc;
+            border-radius: 8px;
+            padding: 1em 1.5em;
+            margin-top: 0.7em;
+            margin-bottom: 1.3em;
+            font-size: 0.99em;
+            color: #495867;
+        }
+        .status-history-title {
+            font-size: 1.02em;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+        .status-history-entry {
+            margin-bottom: 0.23em;
+            padding-left: 1.2em;
+            text-indent: -1.2em;
+        }
+        /* Responsive */
+        @media (max-width: 1050px) {
+            .dashboard-flex { flex-direction: column;}
+            .right-col {max-width: 100%;}
+            .metrics-bar {flex-direction: column; gap: 1.2em;}
+        }
+        @media (max-width: 750px) {
+            header, .info-bar, .section-card {padding-left: 1em; padding-right: 1em;}
+            .dashboard-section {padding: 1.2em 0.5em;}
+            .accordion-content {padding: 1.3em;}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span><span class="material-icons header-logo">dashboard</span>Werkprogramma Vergunningbeoordeling</span>
+        <span style="font-size:0.8em;color:#fff8;">vDemo</span>
+    </header>
+    <div class="info-bar">
+        <div class="info-group">
+            <span>Aanvraagnummer: <strong>2025-00087</strong></span>
+            <span>Indieningsdatum: <strong>02-06-2025</strong></span>
+            <span>Status: <span class="status-badge status-nieuw" id="main-status">Nieuw</span></span>
+        </div>
+        <div class="info-group">
+            <span>Aanvrager: <strong>Stichting Virtueel Geduld</strong></span>
+            <span>Contact: <strong>jane.doe@email.nl</strong></span>
+        </div>
+    </div>
+    <div class="dashboard-section">
+        
+        <!-- Metrics Bar -->
+        <div class="metrics-bar">
+            <div class="metric-card">
+                <span class="material-icons metric-icon">assignment</span>
+                <div>
+                    <div class="metric-label">Aantal Thema’s</div>
+                    <div class="metric-value" id="themaCount">4</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <span class="material-icons metric-icon" style="color:var(--danger);">warning</span>
+                <div>
+                    <div class="metric-label">Hoog risico thema’s</div>
+                    <div class="metric-value" id="highRiskCount">1</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <span class="material-icons metric-icon" style="color:var(--medium);">hourglass_top</span>
+                <div>
+                    <div class="metric-label">Nog niet beoordeeld</div>
+                    <div class="metric-value" id="notReviewedCount">4</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <span class="material-icons metric-icon" style="color:var(--success);">how_to_reg</span>
+                <div>
+                    <div class="metric-label">Goedgekeurd</div>
+                    <div class="metric-value" id="approvedCount">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-flex">
+            <!-- LEFT COL -->
+            <div class="left-col">
+                <!-- Overzicht & Statusgeschiedenis -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <span class="material-icons">info</span>Overzicht & Statusgeschiedenis
+                    </div>
+                    <div id="statusHistory" class="status-history"></div>
+                    <div class="filters">
+                        <label for="filter-theme">Filter thema:</label>
+                        <select id="filter-theme">
+                            <option value="all">Alle</option>
+                            <option value="Governance">Governance</option>
+                            <option value="IT">IT</option>
+                            <option value="Risk Management">Risk Management</option>
+                            <option value="Compliance">Compliance</option>
+                        </select>
+                        <label for="filter-risk">Risico:</label>
+                        <select id="filter-risk">
+                            <option value="all">Alle</option>
+                            <option value="Hoog">Hoog</option>
+                            <option value="Midden">Midden</option>
+                            <option value="Laag">Laag</option>
+                        </select>
+                        <label for="filter-status">Beoordeling:</label>
+                        <select id="filter-status">
+                            <option value="all">Alle</option>
+                            <option value="Goedgekeurd">Goedgekeurd</option>
+                            <option value="Afgekeurd">Afgekeurd</option>
+                            <option value="Nog niet beoordeeld">Nog niet beoordeeld</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Bookmark -->
+                <div class="bookmark-bar">
+                    <span>Thema:</span>
+                    <button class="bookmark-btn" onclick="scrollToAccordion('Governance')">Governance</button>
+                    <button class="bookmark-btn" onclick="scrollToAccordion('IT')">IT</button>
+                    <button class="bookmark-btn" onclick="scrollToAccordion('Risk Management')">Risk Management</button>
+                    <button class="bookmark-btn" onclick="scrollToAccordion('Compliance')">Compliance</button>
+                </div>
+                <!-- Accordion Thema's -->
+                <div id="accordion" class="accordion"></div>
+                <!-- Warning: niet alle thema's beoordeeld -->
+                <div id="notReviewedWarning" class="warning" style="display:none;">
+                    Niet alle thema’s zijn beoordeeld! Controleer het werkprogramma.
+                </div>
+                <!-- Go/No-Go indicator -->
+                <div class="go-indicator">
+                    <span class="go-status nogo" id="goIndicator">NO GO</span>
+                </div>
+            </div>
+            <!-- RIGHT COL -->
+            <div class="right-col">
+                <div class="section-card">
+                    <div class="section-header">
+                        <span class="material-icons">assessment</span>Risico-overzicht
+                        <span class="spacer"></span>
+                    </div>
+                    <div class="charts-row">
+                        <canvas id="riskBarChart" class="risk-bar-chart"></canvas>
+                        <canvas id="spiderDiagram" class="spider-diagram"></canvas>
+                    </div>
+                    <div class="legend">
+                        <span><span class="legend-box bar-red"></span>Hoog</span>
+                        <span><span class="legend-box bar-orange"></span>Midden</span>
+                        <span><span class="legend-box bar-green"></span>Laag</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Chart.js for spider and bar chart (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Placeholder DATA -- you can easily map this to an API or back-end
+        const THEMES = [
+            {
+                name: "Governance",
+                icon: "account_balance",
+                risk: "Hoog",
+                riskScore: 85,
+                context: "Bestuur, structuur en toezicht binnen de organisatie.",
+                applicantAnswers: [
+                    { question: "Heeft uw organisatie een bestuursstructuur?", answer: "Ja, met maandelijkse vergaderingen.", score: 5 },
+                    { question: "Zijn verantwoordelijkheden duidelijk vastgelegd?", answer: "Ja, in het organigram.", score: 4 }
+                ]
+            },
+            {
+                name: "IT",
+                icon: "computer",
+                risk: "Midden",
+                riskScore: 55,
+                context: "Beheer, beveiliging en continuïteit van IT-systemen.",
+                applicantAnswers: [
+                    { question: "Zijn kritieke IT-systemen beveiligd?", answer: "Basisbeveiliging aanwezig.", score: 3 },
+                    { question: "Worden back-ups getest?", answer: "Niet structureel.", score: 2 }
+                ]
+            },
+            {
+                name: "Risk Management",
+                icon: "report_problem",
+                risk: "Laag",
+                riskScore: 28,
+                context: "Proces voor identificatie, beoordeling en beheersing van risico's.",
+                applicantAnswers: [
+                    { question: "Is er een risicobeoordelingsproces?", answer: "Jaarlijks uitgevoerd.", score: 5 },
+                    { question: "Hoe wordt omgegaan met incidenten?", answer: "Direct gemeld aan management.", score: 5 }
+                ]
+            },
+            {
+                name: "Compliance",
+                icon: "gavel",
+                risk: "Midden",
+                riskScore: 45,
+                context: "Naleving van relevante wet- en regelgeving.",
+                applicantAnswers: [
+                    { question: "Voldoet u aan relevante wetgeving?", answer: "Grotendeels, sommige punten aandacht nodig.", score: 3 },
+                    { question: "Zijn compliance-trainingen verplicht?", answer: "Niet voor alle medewerkers.", score: 2 }
+                ]
+            }
+        ];
+
+        // Initieel & Reviewer status per thema (simulatie)
+        let themeReviews = {}; // {themeName: { status, remark, vervolg, reviewer: {status, remark, vervolg}}}
+        let statusHistory = [
+            { status: 'Nieuw', date: '02-06-2025', by: 'Systeem' }
+        ];
+
+        // --- Render Metrics ---
+        function renderMetrics() {
+            document.getElementById('themaCount').textContent = THEMES.length;
+            document.getElementById('highRiskCount').textContent = THEMES.filter(t => t.risk === 'Hoog').length;
+            document.getElementById('notReviewedCount').textContent =
+                THEMES.filter(t => !themeReviews[t.name] || (themeReviews[t.name].status === "Nog niet beoordeeld")).length;
+            document.getElementById('approvedCount').textContent =
+                THEMES.filter(t => themeReviews[t.name] && themeReviews[t.name].status === "Goedgekeurd").length;
+        }
+
+        // --- Statusgeschiedenis ---
+        function renderStatusHistory() {
+            const hist = statusHistory.map(entry =>
+                `<div class="status-history-entry">
+                    <span class="material-icons" style="font-size:1.09em;vertical-align:-0.18em;">history</span>
+                    <strong>${entry.status}</strong> (${entry.date}) <span style="color:#7d8a99;">${entry.by}</span>
+                </div>`
+            ).join('');
+            document.getElementById('statusHistory').innerHTML =
+                '<div class="status-history-title">Statusgeschiedenis:</div>' + hist;
+        }
+
+        // --- Filtering helpers ---
+        function filterTheme(theme) {
+            let val = document.getElementById('filter-theme').value;
+            return val === "all" || theme.name === val;
+        }
+        function filterRisk(theme) {
+            let val = document.getElementById('filter-risk').value;
+            if (val === "all") return true;
+            return theme.risk === val;
+        }
+        function filterStatus(theme) {
+            let val = document.getElementById('filter-status').value;
+            if (val === "all") return true;
+            let review = themeReviews[theme.name] || { status: "Nog niet beoordeeld" };
+            return review.status === val;
+        }
+        document.getElementById('filter-theme').addEventListener('change', renderAccordion);
+        document.getElementById('filter-risk').addEventListener('change', renderAccordion);
+        document.getElementById('filter-status').addEventListener('change', renderAccordion);
+
+        // --- Accordion rendering ---
+        function renderAccordion() {
+            const accordion = document.getElementById('accordion');
+            accordion.innerHTML = '';
+            THEMES.forEach(theme => {
+                // Filter logic
+                if (!(filterTheme(theme) && filterRisk(theme) && filterStatus(theme))) return;
+
+                // Status info
+                let review = themeReviews[theme.name] || {
+                    status: "Nog niet beoordeeld",
+                    remark: "",
+                    vervolg: "Nee",
+                    reviewer: {
+                        status: "Nog niet beoordeeld",
+                        remark: "",
+                        vervolg: "Nee"
+                    }
+                };
+
+                let statusColor = review.status === "Goedgekeurd" ? "review-status-goedgekeurd" :
+                                  review.status === "Afgekeurd" ? "review-status-afgekeurd" :
+                                  "review-status-niet";
+                let reviewerStatusColor = review.reviewer && review.reviewer.status === "Goedgekeurd" ? "review-status-goedgekeurd" :
+                                         review.reviewer && review.reviewer.status === "Afgekeurd" ? "review-status-afgekeurd" :
+                                         "review-status-niet";
+
+                let reviewerMeta = "";
+                if (review.reviewer && review.reviewer.status !== "Nog niet beoordeeld") {
+                    reviewerMeta = `<div class="reviewer-meta">
+                        <span class="material-icons" style="font-size:1em;vertical-align:-0.13em;">supervisor_account</span>
+                        Reviewer: <span class="review-status-badge ${reviewerStatusColor}">${review.reviewer.status}</span>
+                        <span style="color:#989fba;">${review.reviewer.remark ? "Opmerking: "+review.reviewer.remark : ""}</span>
+                    </div>`;
+                }
+                // Accordion
+                accordion.innerHTML += `
+                <div class="accordion-item" id="item-${theme.name}">
+                    <div class="accordion-header" onclick="toggleAccordion('${theme.name}')">
+                        <span class="expand-icon material-icons">chevron_right</span> 
+                        <span class="theme-icon material-icons">${theme.icon}</span>
+                        ${theme.name}
+                        <span style="margin-left:auto;">
+                            <span class="review-status-badge ${statusColor}">
+                                ${review.status}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="theme-context">${theme.context}</div>
+                        <div class="applicant-answers">
+                            ${theme.applicantAnswers.map(ans =>
+                                `<div class="question-block">
+                                    <strong>${ans.question}</strong>
+                                    <div class="applicant-answer">${ans.answer} <span class="score-label">Score: ${ans.score}</span></div>
+                                </div>`
+                            ).join('')}
+                        </div>
+                        <div>
+                            <label for="remark-${theme.name}">Opmerkingen beoordelaar:</label><br>
+                            <textarea class="remark-field" id="remark-${theme.name}" 
+                                placeholder="Typ hier uw opmerkingen...">${review.remark || ""}</textarea>
+                        </div>
+                        <div class="review-section">
+                            <span class="review-label">Status beoordeling:</span>
+                            <span class="reviewer-ctrl-group">
+                                <select id="status-${theme.name}" onchange="updateReview('${theme.name}')">
+                                    <option value="Nog niet beoordeeld" ${review.status === "Nog niet beoordeeld" ? "selected" : ""}>Nog niet beoordeeld</option>
+                                    <option value="Goedgekeurd" ${review.status === "Goedgekeurd" ? "selected" : ""}>Goedgekeurd</option>
+                                    <option value="Afgekeurd" ${review.status === "Afgekeurd" ? "selected" : ""}>Afgekeurd</option>
+                                </select>
+                            </span>
+                            <span class="review-label">Noodzaak vervolgactie?</span>
+                            <span class="reviewer-ctrl-group">
+                                <select id="vervolg-${theme.name}" onchange="updateReview('${theme.name}')">
+                                    <option value="Nee" ${review.vervolg === "Nee" ? "selected" : ""}>Nee</option>
+                                    <option value="Ja" ${review.vervolg === "Ja" ? "selected" : ""}>Ja</option>
+                                </select>
+                            </span>
+                        </div>
+                        ${reviewerMeta}
+                        <div class="reviewer-flow">
+                            <details>
+                                <summary style="cursor:pointer;font-size:1.04em;">
+                                    <span class="material-icons" style="vertical-align:-0.23em;color:var(--primary);">done_all</span>
+                                    Reviewer beoordeling (tweede lijn)
+                                </summary>
+                                <div class="reviewer-row">
+                                    <span class="review-label">Status reviewer:</span>
+                                    <span class="reviewer-ctrl-group">
+                                        <select id="rev-status-${theme.name}" onchange="updateReviewer('${theme.name}')">
+                                            <option value="Nog niet beoordeeld" ${review.reviewer.status === "Nog niet beoordeeld" ? "selected" : ""}>Nog niet beoordeeld</option>
+                                            <option value="Goedgekeurd" ${review.reviewer.status === "Goedgekeurd" ? "selected" : ""}>Goedgekeurd</option>
+                                            <option value="Afgekeurd" ${review.reviewer.status === "Afgekeurd" ? "selected" : ""}>Afgekeurd</option>
+                                        </select>
+                                    </span>
+                                    <span class="review-label">Noodzaak vervolgactie?</span>
+                                    <span class="reviewer-ctrl-group">
+                                        <select id="rev-vervolg-${theme.name}" onchange="updateReviewer('${theme.name}')">
+                                            <option value="Nee" ${review.reviewer.vervolg === "Nee" ? "selected" : ""}>Nee</option>
+                                            <option value="Ja" ${review.reviewer.vervolg === "Ja" ? "selected" : ""}>Ja</option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div>
+                                    <label for="rev-remark-${theme.name}">Opmerking reviewer:</label><br>
+                                    <textarea class="remark-field" id="rev-remark-${theme.name}" 
+                                        placeholder="Typ hier uw opmerkingen...">${review.reviewer.remark || ""}</textarea>
+                                </div>
+                                <button class="bookmark-btn" style="margin-top:0.8em;font-size:0.97em;" onclick="saveReviewer('${theme.name}')">Reviewer opslaan</button>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            updateWarning();
+            renderMetrics();
+        }
+
+        // --- Accordion expand/collapse ---
+        function toggleAccordion(themeName) {
+            let el = document.getElementById(`item-${themeName}`);
+            if (el.classList.contains('open')) {
+                el.classList.remove('open');
+            } else {
+                // Close others
+                document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('open'));
+                el.classList.add('open');
+            }
+        }
+
+        // --- Bookmark scroll ---
+        function scrollToAccordion(themeName) {
+            let el = document.getElementById(`item-${themeName}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => el.classList.add('open'), 250);
+            }
+        }
+
+        // --- Review handling ---
+        function updateReview(themeName) {
+            // Snarky field validation? Of course.
+            let remark = document.getElementById(`remark-${themeName}`).value;
+            let status = document.getElementById(`status-${themeName}`).value;
+            let vervolg = document.getElementById(`vervolg-${themeName}`).value;
+            if (!themeReviews[themeName]) {
+                themeReviews[themeName] = {
+                    status: status,
+                    remark: remark,
+                    vervolg: vervolg,
+                    reviewer: { status: "Nog niet beoordeeld", remark: "", vervolg: "Nee" }
+                };
+            } else {
+                themeReviews[themeName].status = status;
+                themeReviews[themeName].remark = remark;
+                themeReviews[themeName].vervolg = vervolg;
+            }
+            // Statusgeschiedenis bijwerken
+            let prev = statusHistory[statusHistory.length-1];
+            if (prev.status !== status && status !== "Nog niet beoordeeld") {
+                statusHistory.push({
+                    status: `${themeName}: ${status}`,
+                    date: new Date().toLocaleDateString("nl-NL"),
+                    by: "Beoordelaar"
+                });
+            }
+            renderAccordion();
+            updateGoIndicator();
+            renderStatusHistory();
+        }
+
+        // --- Reviewer handling (details section) ---
+        function updateReviewer(themeName) {
+            let review = themeReviews[themeName] || {
+                status: "Nog niet beoordeeld", remark: "", vervolg: "Nee",
+                reviewer: { status: "Nog niet beoordeeld", remark: "", vervolg: "Nee" }
+            };
+            let revStatus = document.getElementById(`rev-status-${themeName}`).value;
+            let revRemark = document.getElementById(`rev-remark-${themeName}`).value;
+            let revVervolg = document.getElementById(`rev-vervolg-${themeName}`).value;
+            review.reviewer = {
+                status: revStatus,
+                remark: revRemark,
+                vervolg: revVervolg
+            };
+            themeReviews[themeName] = review;
+        }
+        function saveReviewer(themeName) {
+            updateReviewer(themeName);
+            let rev = themeReviews[themeName].reviewer;
+            if (rev.status && rev.status !== "Nog niet beoordeeld") {
+                statusHistory.push({
+                    status: `${themeName}: Reviewer ${rev.status}`,
+                    date: new Date().toLocaleDateString("nl-NL"),
+                    by: "Reviewer"
+                });
+            }
+            renderAccordion();
+            updateGoIndicator();
+            renderStatusHistory();
+        }
+
+        // --- Not all reviewed warning ---
+        function updateWarning() {
+            let allReviewed = THEMES.every(theme =>
+                (themeReviews[theme.name] || { status: "Nog niet beoordeeld" }).status !== "Nog niet beoordeeld"
+            );
+            document.getElementById('notReviewedWarning').style.display = allReviewed ? "none" : "";
+        }
+
+        // --- Go/No-Go logic ---
+        function updateGoIndicator() {
+            let anyRejected = THEMES.some(theme =>
+                (themeReviews[theme.name] || { status: "Nog niet beoordeeld" }).status === "Afgekeurd"
+            );
+            let allApproved = THEMES.every(theme =>
+                (themeReviews[theme.name] || { status: "Nog niet beoordeeld" }).status === "Goedgekeurd"
+            );
+            let statusEl = document.getElementById('goIndicator');
+            let mainStatus = document.getElementById('main-status');
+            if (anyRejected) {
+                statusEl.textContent = "NO GO";
+                statusEl.className = "go-status nogo";
+                mainStatus.textContent = "Geweigerd";
+                mainStatus.className = "status-badge status-geweigerd";
+            } else if (allApproved) {
+                statusEl.textContent = "GO";
+                statusEl.className = "go-status go";
+                mainStatus.textContent = "Afgerond";
+                mainStatus.className = "status-badge status-afgerond";
+            } else {
+                statusEl.textContent = "NO GO";
+                statusEl.className = "go-status pending";
+                mainStatus.textContent = "In Behandeling";
+                mainStatus.className = "status-badge status-inbehandeling";
+            }
+        }
+
+        // --- Draw risk bar chart ---
+        function drawRiskBarChart() {
+            let ctx = document.getElementById('riskBarChart').getContext('2d');
+            let data = {
+                labels: THEMES.map(t => t.name),
+                datasets: [{
+                    label: "Risicoscore",
+                    data: THEMES.map(t => t.riskScore),
+                    backgroundColor: THEMES.map(t =>
+                        t.risk === "Hoog" ? "#e03d31" : t.risk === "Midden" ? "#f7b801" : "#49a447"
+                    ),
+                    borderWidth: 1
+                }]
+            };
+            if(window.riskBar) window.riskBar.destroy();
+            window.riskBar = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+        // --- Draw spider (radar) chart ---
+        function drawSpiderDiagram() {
+            let ctx = document.getElementById('spiderDiagram').getContext('2d');
+            let applicantScores = THEMES.map(t => t.riskScore);
+            let populationScores = [70, 60, 50, 65]; // Placeholder
+            if(window.spiderChart) window.spiderChart.destroy();
+            window.spiderChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: THEMES.map(t => t.name),
+                    datasets: [
+                        {
+                            label: 'Aanvraag',
+                            data: applicantScores,
+                            fill: true,
+                            backgroundColor: 'rgba(51, 122, 183, 0.2)',
+                            borderColor: 'rgba(51, 122, 183, 0.8)',
+                            pointBackgroundColor: 'rgba(51, 122, 183, 0.9)'
+                        },
+                        {
+                            label: 'Populatie',
+                            data: populationScores,
+                            fill: true,
+                            backgroundColor: 'rgba(247, 184, 1, 0.12)',
+                            borderColor: 'rgba(247, 184, 1, 0.85)',
+                            pointBackgroundColor: 'rgba(247, 184, 1, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- INIT: Render everything on load ---
+        function renderAll() {
+            renderAccordion();
+            drawRiskBarChart();
+            drawSpiderDiagram();
+            updateGoIndicator();
+            renderMetrics();
+            renderStatusHistory();
+        }
+        renderAll();
+
+        // --- Window resize: redraw charts for high-DPI nerds ---
+        window.addEventListener('resize', function() {
+            drawRiskBarChart();
+            drawSpiderDiagram();
+        });
+    </script>
+</body>
+</html>
