@@ -153,14 +153,21 @@
             display: flex;
             gap: 2.4em;
             align-items: flex-end;
+            flex-wrap: wrap; 
+            justify-content: center; 
+
         }
         .risk-bar-chart {
             width: 330px;
             height: 220px;
+            max-width: 100%; 
+
         }
         .spider-diagram {
             width: 240px;
             height: 240px;
+            max-width: 100%; 
+
         }
         .legend {
             display: flex;
@@ -393,6 +400,188 @@
             padding-left: 1.2em;
             text-indent: -1.2em;
         }
+        .vervolg-section {
+            margin-top: 1.5em;
+            padding-top: 1.5em;
+            border-top: 2px dashed #d2e2f1;
+        }
+        .vervolg-header {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1em;
+        }
+        .vervolg-form {
+            background: #f9fafc;
+            padding: 1.5em;
+            border-radius: 8px;
+            border: 1px solid #e0e6ed;
+        }
+        .vervolg-form textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.8em;
+            border-radius: 6px;
+            border: 1px solid #c6cad0;
+            font-family: inherit;
+            font-size: 1em;
+            margin-bottom: 1em;
+        }
+        .vervolg-response {
+            background: #e8f5e9;
+            padding: 1em;
+            border-radius: 6px;
+            border-left: 4px solid var(--success);
+            margin-top: 1em;
+            display: none;
+        }
+        .vervolg-response.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .vervolg-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7em 1.5em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background 0.2s;
+        }
+        .vervolg-btn:hover {
+            background: #002244;
+        }
+        .vervolg-actions {
+            display: flex;
+            gap: 1em;
+            margin-top: 1em;
+        }
+        .vervolg-send-btn {
+            background: var(--success);
+        }
+        .vervolg-cancel-btn {
+            background: var(--grey);
+        }
+        .vervolg-actions button {
+            padding: 0.6em 1.2em;
+            border-radius: 6px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .vervolg-actions button:hover {
+            opacity: 0.9;
+        }
+        .vervolg-send-btn:hover {
+            background: #3d8a3d;
+        }
+        .vervolg-cancel-btn:hover {
+            background: #9e9e9e;
+        }
+        .vervolg-history {
+            margin-top: 1.5em;
+            padding-top: 1.5em;
+            border-top: 1px dashed #d2e2f1;
+        }
+        .vervolg-history-item {
+            margin-bottom: 1em;
+            padding: 1em;
+            background: #f0f7ff;
+            border-radius: 6px;
+        }
+        .vervolg-history-question {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+        .vervolg-history-answer {
+            padding-left: 1em;
+        }
+        .vervolg-history-date {
+            font-size: 0.85em;
+            color: #666;
+            text-align: right;
+            margin-top: 0.5em;
+        }
+        .final-decision {
+            margin-top: 3em;
+            padding: 2em;
+            background: #f9fafc;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            text-align: center;
+        }
+        .decision-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1em;
+        }
+        .decision-options {
+            display: flex;
+            justify-content: center;
+            gap: 2em;
+            margin: 2em 0;
+        }
+        .decision-btn {
+            padding: 1em 2em;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .approve-btn {
+            background: var(--success);
+            color: white;
+        }
+        .reject-btn {
+            background: var(--danger);
+            color: white;
+        }
+        .decision-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .decision-btn:active {
+            transform: translateY(1px);
+        }
+        .decision-confirmation {
+            display: none;
+            margin-top: 2em;
+            padding: 2em;
+            background: #e8f5e9;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .decision-confirmation.show {
+            display: block;
+        }
+        .confirmation-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--success);
+            margin-bottom: 0.5em;
+        }
+        .confirmation-text {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+        }
+        .confirmation-actions {
+            margin-top: 1.5em;
+        }
+        .confirmation-actions button {
+            padding: 0.8em 1.5em;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--primary);
+            color: white;
+            margin: 0 0.5em;
+        }
         /* Responsive */
         @media (max-width: 1050px) {
             .dashboard-flex { flex-direction: column;}
@@ -403,6 +592,7 @@
             header, .info-bar, .section-card {padding-left: 1em; padding-right: 1em;}
             .dashboard-section {padding: 1.2em 0.5em;}
             .accordion-content {padding: 1.3em;}
+            .decision-options { flex-direction: column; }
         }
     </style>
 </head>
@@ -503,9 +693,60 @@
                 <div id="notReviewedWarning" class="warning" style="display:none;">
                     Niet alle thema’s zijn beoordeeld! Controleer het werkprogramma.
                 </div>
+                <!-- Vervolgactie Section -->
+                <div id="vervolgactieSection" class="vervolg-section" style="display:none;">
+                    <div class="vervolg-header">
+                        <span class="material-icons">question_answer</span> Vervolgactie: Stel een vraag aan de aanvrager
+                    </div>
+                    <div class="vervolg-form">
+                        <div>
+                            <label for="vervolgQuestion">Uw vraag:</label>
+                            <textarea id="vervolgQuestion" placeholder="Typ hier uw vraag aan de aanvrager..."></textarea>
+                        </div>
+                        <div class="vervolg-actions">
+                            <button class="vervolg-btn vervolg-send-btn" onclick="sendVervolgQuestion()">Verstuur vraag</button>
+                            <button class="vervolg-btn vervolg-cancel-btn" onclick="cancelVervolgQuestion()">Annuleren</button>
+                        </div>
+                    </div>
+                    <div id="vervolgResponse" class="vervolg-response">
+                        <div class="vervolg-header">
+                            <span class="material-icons">assignment_turned_in</span> Ontvangen antwoord
+                        </div>
+                        <div id="vervolgAnswerText"></div>
+                        <div class="vervolg-actions" style="margin-top:1em;">
+                            <button class="vervolg-btn" onclick="acceptAnswer()">Antwoord accepteren</button>
+                            <button class="vervolg-btn vervolg-cancel-btn" onclick="requestClarification()">Verduidelijking vragen</button>
+                        </div>
+                    </div>
+                    <div id="vervolgHistory" class="vervolg-history">
+                        <div class="vervolg-header">
+                            <span class="material-icons">history</span> Geschiedenis van vervolgacties
+                        </div>
+                        <div id="vervolgHistoryContent"></div>
+                    </div>
+                </div>
                 <!-- Go/No-Go indicator -->
                 <div class="go-indicator">
                     <span class="go-status nogo" id="goIndicator">NO GO</span>
+                </div>
+                <!-- Final Decision Section -->
+                <div class="final-decision">
+                    <div class="decision-title">Definitieve beslissing</div>
+                    <p>Na beoordeling van alle thema's kunt u hier de definitieve beslissing nemen:</p>
+                    <div class="decision-options">
+                        <button class="decision-btn approve-btn" onclick="showConfirmation('approve')">Vergunning verlenen</button>
+                        <button class="decision-btn reject-btn" onclick="showConfirmation('reject')">Vergunning weigeren</button>
+                    </div>
+                    <div id="decisionConfirmation" class="decision-confirmation">
+                        <div class="confirmation-title" id="confirmationTitle">Vergunning verleend!</div>
+                        <div class="confirmation-text" id="confirmationText">
+                            U heeft besloten de vergunning te verlenen. Deze beslissing wordt nu definitief gemaakt.
+                        </div>
+                        <div class="confirmation-actions">
+                            <button onclick="finalizeDecision()">Bevestigen</button>
+                            <button onclick="cancelDecision()">Annuleren</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- RIGHT COL -->
@@ -578,6 +819,10 @@
                 ]
             }
         ];
+
+        // Vervolgactie history
+        let vervolgHistory = [];
+        let currentVervolgTheme = null;
 
         // Initieel & Reviewer status per thema (simulatie)
         let themeReviews = {}; // {themeName: { status, remark, vervolg, reviewer: {status, remark, vervolg}}}
@@ -662,6 +907,17 @@
                         <span style="color:#989fba;">${review.reviewer.remark ? "Opmerking: "+review.reviewer.remark : ""}</span>
                     </div>`;
                 }
+                
+                // Vervolgactie history for this theme
+                const themeVervolgHistory = vervolgHistory.filter(item => item.theme === theme.name);
+                const vervolgHistoryHTML = themeVervolgHistory.map(item => `
+                    <div class="vervolg-history-item">
+                        <div class="vervolg-history-question">${item.question}</div>
+                        <div class="vervolg-history-answer">${item.answer || '<em>Nog geen antwoord</em>'}</div>
+                        <div class="vervolg-history-date">${item.date}</div>
+                    </div>
+                `).join('');
+                
                 // Accordion
                 accordion.innerHTML += `
                 <div class="accordion-item" id="item-${theme.name}">
@@ -701,13 +957,24 @@
                             </span>
                             <span class="review-label">Noodzaak vervolgactie?</span>
                             <span class="reviewer-ctrl-group">
-                                <select id="vervolg-${theme.name}" onchange="updateReview('${theme.name}')">
+                                <select id="vervolg-${theme.name}" onchange="handleVervolgChange('${theme.name}')">
                                     <option value="Nee" ${review.vervolg === "Nee" ? "selected" : ""}>Nee</option>
                                     <option value="Ja" ${review.vervolg === "Ja" ? "selected" : ""}>Ja</option>
                                 </select>
                             </span>
                         </div>
                         ${reviewerMeta}
+                        
+                        <!-- Vervolgactie History -->
+                        ${vervolgHistoryHTML ? `
+                        <div class="vervolg-history">
+                            <div class="vervolg-header">
+                                <span class="material-icons">history</span> Vervolgactie geschiedenis
+                            </div>
+                            ${vervolgHistoryHTML}
+                        </div>
+                        ` : ''}
+                        
                         <div class="reviewer-flow">
                             <details>
                                 <summary style="cursor:pointer;font-size:1.04em;">
@@ -761,11 +1028,116 @@
 
         // --- Bookmark scroll ---
         function scrollToAccordion(themeName) {
-            let el = document.getElementById(`item-${themeName}`);
+            let el = document.getElementById(`item-${theme.name}`);
             if (el) {
                 el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 setTimeout(() => el.classList.add('open'), 250);
             }
+        }
+
+        // --- Vervolgactie handling ---
+        function handleVervolgChange(themeName) {
+            const vervolg = document.getElementById(`vervolg-${themeName}`).value;
+            
+            // Update the review object
+            if (!themeReviews[themeName]) {
+                themeReviews[themeName] = {
+                    status: "Nog niet beoordeeld",
+                    remark: "",
+                    vervolg: vervolg,
+                    reviewer: { status: "Nog niet beoordeeld", remark: "", vervolg: "Nee" }
+                };
+            } else {
+                themeReviews[themeName].vervolg = vervolg;
+            }
+            
+            // Show vervolgactie section if "Ja" is selected
+            if (vervolg === "Ja") {
+                currentVervolgTheme = themeName;
+                document.getElementById('vervolgactieSection').style.display = 'block';
+                document.getElementById('vervolgQuestion').value = '';
+                document.getElementById('vervolgResponse').classList.remove('show');
+                
+                // Scroll to vervolg section
+                document.getElementById('vervolgactieSection').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                document.getElementById('vervolgactieSection').style.display = 'none';
+            }
+            
+            renderAccordion();
+        }
+
+        function sendVervolgQuestion() {
+            const question = document.getElementById('vervolgQuestion').value.trim();
+            if (!question) {
+                alert('Vul een vraag in');
+                return;
+            }
+            
+            // Add to history
+            vervolgHistory.push({
+                theme: currentVervolgTheme,
+                question: question,
+                answer: "",
+                date: new Date().toLocaleDateString('nl-NL') + ' ' + new Date().toLocaleTimeString('nl-NL')
+            });
+            
+            // Update UI
+            document.getElementById('vervolgQuestion').value = '';
+            document.getElementById('vervolgResponse').classList.add('show');
+            document.getElementById('vervolgAnswerText').innerHTML = `
+                <p><strong>Uw vraag:</strong> ${question}</p>
+                <p><strong>Status:</strong> Wachten op antwoord van aanvrager</p>
+            `;
+            
+            // Update status history
+            statusHistory.push({
+                status: `Vervolgvraag gesteld voor ${currentVervolgTheme}`,
+                date: new Date().toLocaleDateString("nl-NL"),
+                by: "Beoordelaar"
+            });
+            renderStatusHistory();
+            renderAccordion();
+        }
+
+        function cancelVervolgQuestion() {
+            document.getElementById('vervolgactieSection').style.display = 'none';
+            // Reset vervolg selection
+            if (currentVervolgTheme) {
+                document.getElementById(`vervolg-${currentVervolgTheme}`).value = "Nee";
+                if (themeReviews[currentVervolgTheme]) {
+                    themeReviews[currentVervolgTheme].vervolg = "Nee";
+                }
+            }
+            currentVervolgTheme = null;
+        }
+
+        function acceptAnswer() {
+            const lastQuestion = vervolgHistory[vervolgHistory.length - 1];
+            if (lastQuestion) {
+                lastQuestion.answer = document.getElementById('vervolgAnswerText').innerText;
+                
+                // Update status
+                statusHistory.push({
+                    status: `Antwoord geaccepteerd voor ${currentVervolgTheme}`,
+                    date: new Date().toLocaleDateString("nl-NL"),
+                    by: "Beoordelaar"
+                });
+                
+                // Close vervolg section
+                document.getElementById('vervolgactieSection').style.display = 'none';
+                currentVervolgTheme = null;
+                
+                renderStatusHistory();
+                renderAccordion();
+                alert('Antwoord geaccepteerd!');
+            }
+        }
+
+        function requestClarification() {
+            document.getElementById('vervolgQuestion').value = 
+                "Kunt u meer details geven over uw vorige antwoord?";
+            document.getElementById('vervolgResponse').classList.remove('show');
         }
 
         // --- Review handling ---
@@ -931,6 +1303,72 @@
                     }
                 }
             });
+        }
+
+        // --- Decision handling ---
+        function showConfirmation(type) {
+            const confirmation = document.getElementById('decisionConfirmation');
+            if (type === 'approve') {
+                document.getElementById('confirmationTitle').textContent = 'Vergunning verleend!';
+                document.getElementById('confirmationTitle').style.color = 'var(--success)';
+                document.getElementById('confirmationText').innerHTML = `
+                    U heeft besloten de vergunning te verlenen. Deze beslissing wordt nu definitief gemaakt.
+                    <p style="margin-top:1em;font-weight:bold;">Let op: Deze actie is onomkeerbaar!</p>
+                `;
+            } else {
+                document.getElementById('confirmationTitle').textContent = 'Vergunning geweigerd!';
+                document.getElementById('confirmationTitle').style.color = 'var(--danger)';
+                document.getElementById('confirmationText').innerHTML = `
+                    U heeft besloten de vergunning te weigeren. Deze beslissing wordt nu definitief gemaakt.
+                    <p style="margin-top:1em;font-weight:bold;">Let op: Deze actie is onomkeerbaar!</p>
+                `;
+            }
+            confirmation.classList.add('show');
+        }
+
+        function finalizeDecision() {
+            const confirmation = document.getElementById('decisionConfirmation');
+            const isApprove = document.getElementById('confirmationTitle').textContent.includes('verleend');
+            
+            if (isApprove) {
+                // Update all themes to approved
+                THEMES.forEach(theme => {
+                    if (!themeReviews[theme.name]) {
+                        themeReviews[theme.name] = {
+                            status: "Goedgekeurd",
+                            remark: "Automatisch goedgekeurd bij eindbeslissing",
+                            vervolg: "Nee",
+                            reviewer: { status: "Goedgekeurd", remark: "", vervolg: "Nee" }
+                        };
+                    } else {
+                        themeReviews[theme.name].status = "Goedgekeurd";
+                        themeReviews[theme.name].reviewer.status = "Goedgekeurd";
+                    }
+                });
+                
+                statusHistory.push({
+                    status: 'Vergunning verleend',
+                    date: new Date().toLocaleDateString("nl-NL"),
+                    by: "Eindbeslissing"
+                });
+            } else {
+                statusHistory.push({
+                    status: 'Vergunning geweigerd',
+                    date: new Date().toLocaleDateString("nl-NL"),
+                    by: "Eindbeslissing"
+                });
+            }
+            
+            confirmation.classList.remove('show');
+            renderAccordion();
+            updateGoIndicator();
+            renderStatusHistory();
+            
+            alert(`Beslissing is definitief gemaakt: ${isApprove ? 'VERGUNNING VERLEEND' : 'VERGUNNING GEWEIGERD'}`);
+        }
+
+        function cancelDecision() {
+            document.getElementById('decisionConfirmation').classList.remove('show');
         }
 
         // --- INIT: Render everything on load ---
