@@ -4,735 +4,236 @@
     <meta charset="UTF-8">
     <title>Dashboard Werkprogramma Vergunningbeoordeling</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Material Icons CDN for extra visual bling -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #003366;
-            --accent: #f7b801;
-            --danger: #e03d31;
-            --success: #49a447;
-            --medium: #ffa800;
-            --light: #eef2f9;
-            --grey: #b0b8c2;
-            --card-bg: #fff;
-        }
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            background: #f4f7fb;
-            color: #222;
-            min-height: 100vh;
-        }
-        header {
-            background: var(--primary);
-            color: #fff;
-            padding: 1.6em 2em 1.3em 2em;
-            font-size: 1.7em;
-            font-weight: bold;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 5px solid var(--accent);
-            box-shadow: 0 2px 8px #001e4038;
-        }
-        .header-logo {
-            font-size: 2.1em;
-            margin-right: 0.7em;
-            vertical-align: -0.2em;
-        }
-        .info-bar {
-            background: var(--light);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding: 1.2em 2.5em;
-            font-size: 1.08em;
-            border-bottom: 2.2px solid #dde2ea;
-        }
-        .info-group span {
-            display: inline-block;
-            margin-right: 2em;
-        }
-        .status-badge {
-            font-weight: bold;
-            padding: 0.28em 1em;
-            border-radius: 14px;
-            color: #fff;
-            background: #bbb;
-            font-size: 1em;
-            margin-left: 0.8em;
-            display: inline-block;
-        }
-        .status-nieuw { background: var(--primary);}
-        .status-inbehandeling { background: var(--accent); color: #212529;}
-        .status-afgerond { background: var(--success);}
-        .status-geweigerd { background: var(--danger);}
-        .status-herbeoordeling { background: var(--medium); color: #212529;}
-        .metrics-bar {
-            display: flex;
-            gap: 2em;
-            margin-top: 1.2em;
-            margin-bottom: 2em;
-        }
-        .metric-card {
-            flex: 1;
-            background: var(--card-bg);
-            border-radius: 9px;
-            box-shadow: 0 3px 16px 0 #00336612;
-            padding: 1.5em 1.7em;
-            display: flex;
-            align-items: center;
-            gap: 1em;
-        }
-        .metric-icon {
-            font-size: 2.4em;
-            color: var(--primary);
-            margin-right: 0.2em;
-        }
-        .metric-label {
-            color: #444;
-            font-size: 1.08em;
-            margin-bottom: 0.18em;
-        }
-        .metric-value {
-            font-size: 1.38em;
-            font-weight: bold;
-        }
-        .dashboard-flex {
-            display: flex;
-            gap: 2.5em;
-            align-items: flex-start;
-        }
-        .left-col, .right-col {
-            flex: 1;
-        }
-        .right-col {
-            min-width: 390px;
-            max-width: 490px;
-        }
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 11px;
-            box-shadow: 0 5px 30px #00336616;
-            margin-bottom: 2.3em;
-            padding: 2em 2em 1.4em 2em;
-        }
-        .section-header {
-            font-size: 1.3em;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.6em;
-            color: var(--primary);
-            margin-bottom: 1.2em;
-        }
-        .spacer {
-            flex: 1;
-        }
-        .filters {
-            margin: 1em 0 2em 0;
-            display: flex;
-            gap: 1.5em;
-            flex-wrap: wrap;
-        }
-        .filters label {
-            font-size: 0.96em;
-            color: #3d4056;
-            margin-right: 0.3em;
-        }
-        .filters select {
-            margin-right: 0.4em;
-            padding: 0.32em 0.8em;
-            border-radius: 6px;
-            border: 1.3px solid #b6bcc5;
-            font-size: 1.02em;
-        }
-        .charts-row {
-            display: flex;
-            gap: 2.4em;
-            align-items: flex-end;
-            flex-wrap: wrap; 
-            justify-content: center; 
-
-        }
-        .risk-bar-chart {
-            width: 330px;
-            height: 220px;
-            max-width: 100%; 
-
-        }
-        .spider-diagram {
-            width: 240px;
-            height: 240px;
-            max-width: 100%; 
-
-        }
-        .legend {
-            display: flex;
-            align-items: center;
-            gap: 1.7em;
-            margin-top: 0.7em;
-            font-size: 0.97em;
-        }
-        .legend span {
-            display: inline-flex;
-            align-items: center;
-        }
-        .legend-box {
-            display: inline-block;
-            width: 1.2em; height: 1.2em;
-            margin-right: 0.5em;
-            border-radius: 3px;
-            vertical-align: middle;
-        }
-        .bar-red { background: var(--danger); }
-        .bar-orange { background: var(--medium);}
-        .bar-green { background: var(--success);}
-        .accordion {
-            margin: 2em 0;
-        }
-        .accordion-item {
-            margin-bottom: 1.3em;
-            border-radius: 10px;
-            border: 1.7px solid #e0e0e0;
-            overflow: hidden;
-            box-shadow: 0 3px 12px 0 #0033660c;
-            background: #fcfcfd;
-        }
-        .accordion-header {
-            background: #f6fafd;
-            cursor: pointer;
-            padding: 1.1em 1.7em 1.1em 2.4em;
-            font-size: 1.1em;
-            font-weight: 600;
-            position: relative;
-            display: flex;
-            align-items: center;
-            transition: background 0.2s;
-            border-left: 5px solid var(--primary);
-        }
-        .accordion-header .expand-icon {
-            font-size: 1.18em;
-            margin-right: 1.2em;
-            transition: transform 0.22s;
-            color: var(--grey);
-        }
-        .accordion-header .theme-icon {
-            font-size: 1.15em;
-            margin-right: 0.8em;
-            color: var(--accent);
-        }
-        .accordion-item.open .accordion-header {
-            background: #eaf3fa;
-            border-left: 7px solid var(--accent);
-        }
-        .accordion-item.open .expand-icon {
-            transform: rotate(90deg);
-            color: var(--primary);
-        }
-        .accordion-content {
-            background: #fafbfc;
-            display: none;
-            padding: 2.5em 2.8em 1.8em 2.8em;
-            border-top: 1.5px solid #e0e0e0;
-            animation: fadeIn 0.7s;
-        }
-        .accordion-item.open .accordion-content {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0;}
-            to { opacity: 1;}
-        }
-        .theme-context {
-            color: #576485;
-            font-size: 1em;
-            margin-bottom: 1.2em;
-            padding-bottom: 0.5em;
-            border-bottom: 1px dashed #d2e2f1;
-        }
-        .applicant-answers {
-            margin-bottom: 1.1em;
-        }
-        .question-block {
-            margin-bottom: 1.2em;
-        }
-        .applicant-answer {
-            background: #f6ebc1;
-            padding: 0.7em 1em;
-            border-radius: 7px;
-            margin-bottom: 0.6em;
-            font-size: 0.98em;
-            border-left: 4px solid var(--accent);
-        }
-        .score-label {
-            font-size: 0.95em;
-            color: var(--medium);
-            margin-left: 0.7em;
-        }
-        .reviewer-row {
-            display: flex;
-            gap: 1.5em;
-            align-items: center;
-            margin-bottom: 0.7em;
-        }
-        .remark-field {
-            width: 80%;
-            padding: 0.7em;
-            border-radius: 5px;
-            border: 1.4px solid #c6cad0;
-            margin-top: 0.3em;
-            font-size: 1em;
-        }
-        .review-section {
-            margin: 1.1em 0 0.8em 0;
-        }
-        .review-label {
-            margin-right: 0.9em;
-            font-weight: 500;
-            color: #003366b0;
-        }
-        .review-status-badge {
-            padding: 0.23em 1em;
-            border-radius: 11px;
-            font-size: 1em;
-            color: #fff;
-            background: #bbb;
-            margin-left: 0.5em;
-        }
-        .review-status-goedgekeurd { background: var(--success);}
-        .review-status-afgekeurd { background: var(--danger);}
-        .review-status-niet { background: var(--accent); color: #212529;}
-        .reviewer-ctrl-group label { margin-right: 0.5em;}
-        .reviewer-ctrl-group select {
-            padding: 0.3em 1em;
-            border-radius: 6px;
-            border: 1px solid #b6bcc5;
-            margin-right: 0.5em;
-        }
-        .reviewer-ctrl-group input[type=checkbox] {
-            accent-color: var(--primary);
-            margin-right: 0.5em;
-        }
-        .reviewer-meta {
-            font-size: 0.96em;
-            color: #6b747d;
-            margin-top: 0.2em;
-            margin-bottom: 0.6em;
-        }
-        .reviewer-flow {
-            margin-top: 0.9em;
-            padding-top: 0.7em;
-            border-top: 1px dashed #d2e2f1;
-        }
-        .go-indicator {
-            margin: 3em 0 1.5em 0;
-            text-align: center;
-        }
-        .go-indicator .go-status {
-            font-size: 2.1em;
-            font-weight: 700;
-            padding: 0.6em 2em;
-            border-radius: 32px;
-            display: inline-block;
-            color: #fff;
-            box-shadow: 0 0 15px #00336622;
-            letter-spacing: 0.09em;
-        }
-        .go-status.go {
-            background: var(--success);
-            box-shadow: 0 0 8px #49a44755;
-        }
-        .go-status.nogo {
-            background: var(--danger);
-            box-shadow: 0 0 8px #e03d3155;
-        }
-        .go-status.pending {
-            background: var(--accent);
-            color: #222;
-        }
-        .bookmark-bar {
-            text-align: right;
-            margin-bottom: 1.5em;
-        }
-        .bookmark-btn {
-            background: var(--accent);
-            border: none;
-            border-radius: 7px;
-            color: #333;
-            font-weight: bold;
-            padding: 0.44em 1.1em;
-            margin-left: 0.7em;
-            cursor: pointer;
-            font-size: 1em;
-            box-shadow: 0 2px 6px #ffd86e1c;
-            transition: background 0.13s;
-        }
-        .bookmark-btn:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-        .warning {
-            color: var(--danger);
-            font-size: 1.12em;
-            font-weight: bold;
-            margin: 2em 0 0.5em 0;
-            text-align: center;
-        }
-        .status-history {
-            background: #f3f7fc;
-            border-radius: 8px;
-            padding: 1em 1.5em;
-            margin-top: 0.7em;
-            margin-bottom: 1.3em;
-            font-size: 0.99em;
-            color: #495867;
-        }
-        .status-history-title {
-            font-size: 1.02em;
-            font-weight: bold;
-            margin-bottom: 0.5em;
-        }
-        .status-history-entry {
-            margin-bottom: 0.23em;
-            padding-left: 1.2em;
-            text-indent: -1.2em;
-        }
-        .vervolg-section {
-            margin-top: 1.5em;
-            padding-top: 1.5em;
-            border-top: 2px dashed #d2e2f1;
-        }
-        .vervolg-header {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 1em;
-        }
-        .vervolg-form {
-            background: #f9fafc;
-            padding: 1.5em;
-            border-radius: 8px;
-            border: 1px solid #e0e6ed;
-        }
-        .vervolg-form textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 0.8em;
-            border-radius: 6px;
-            border: 1px solid #c6cad0;
-            font-family: inherit;
-            font-size: 1em;
-            margin-bottom: 1em;
-        }
-        .vervolg-response {
-            background: #e8f5e9;
-            padding: 1em;
-            border-radius: 6px;
-            border-left: 4px solid var(--success);
-            margin-top: 1em;
-            display: none;
-        }
-        .vervolg-response.show {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        .vervolg-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.7em 1.5em;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
-            transition: background 0.2s;
-        }
-        .vervolg-btn:hover {
-            background: #002244;
-        }
-        .vervolg-actions {
-            display: flex;
-            gap: 1em;
-            margin-top: 1em;
-        }
-        .vervolg-send-btn {
-            background: var(--success);
-        }
-        .vervolg-cancel-btn {
-            background: var(--grey);
-        }
-        .vervolg-actions button {
-            padding: 0.6em 1.2em;
-            border-radius: 6px;
-            border: none;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .vervolg-actions button:hover {
-            opacity: 0.9;
-        }
-        .vervolg-send-btn:hover {
-            background: #3d8a3d;
-        }
-        .vervolg-cancel-btn:hover {
-            background: #9e9e9e;
-        }
-        .vervolg-history {
-            margin-top: 1.5em;
-            padding-top: 1.5em;
-            border-top: 1px dashed #d2e2f1;
-        }
-        .vervolg-history-item {
-            margin-bottom: 1em;
-            padding: 1em;
-            background: #f0f7ff;
-            border-radius: 6px;
-        }
-        .vervolg-history-question {
-            font-weight: bold;
-            margin-bottom: 0.5em;
-        }
-        .vervolg-history-answer {
-            padding-left: 1em;
-        }
-        .vervolg-history-date {
-            font-size: 0.85em;
-            color: #666;
-            text-align: right;
-            margin-top: 0.5em;
-        }
-        .final-decision {
-            margin-top: 3em;
-            padding: 2em;
-            background: #f9fafc;
-            border-radius: 10px;
-            border: 2px solid var(--primary);
-            text-align: center;
-        }
-        .decision-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 1em;
-        }
-        .decision-options {
-            display: flex;
-            justify-content: center;
-            gap: 2em;
-            margin: 2em 0;
-        }
-        .decision-btn {
-            padding: 1em 2em;
-            font-size: 1.2em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .approve-btn {
-            background: var(--success);
-            color: white;
-        }
-        .reject-btn {
-            background: var(--danger);
-            color: white;
-        }
-        .decision-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .decision-btn:active {
-            transform: translateY(1px);
-        }
-        .decision-confirmation {
-            display: none;
-            margin-top: 2em;
-            padding: 2em;
-            background: #e8f5e9;
-            border-radius: 8px;
-            animation: fadeIn 0.5s;
-        }
-        .decision-confirmation.show {
-            display: block;
-        }
-        .confirmation-title {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--success);
-            margin-bottom: 0.5em;
-        }
-        .confirmation-text {
-            font-size: 1.2em;
-            margin-bottom: 1em;
-        }
-        .confirmation-actions {
-            margin-top: 1.5em;
-        }
-        .confirmation-actions button {
-            padding: 0.8em 1.5em;
-            font-size: 1em;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: var(--primary);
-            color: white;
-            margin: 0 0.5em;
-        }
-        /* Responsive */
-        @media (max-width: 1050px) {
-            .dashboard-flex { flex-direction: column;}
-            .right-col {max-width: 100%;}
-            .metrics-bar {flex-direction: column; gap: 1.2em;}
-        }
-        @media (max-width: 750px) {
-            header, .info-bar, .section-card {padding-left: 1em; padding-right: 1em;}
-            .dashboard-section {padding: 1.2em 0.5em;}
-            .accordion-content {padding: 1.3em;}
-            .decision-options { flex-direction: column; }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <span><span class="material-icons header-logo">dashboard</span>Werkprogramma Vergunningbeoordeling</span>
-        <span style="font-size:0.8em;color:#fff8;">vDemo</span>
+        <span class="version">vDemo</span>
+        <button class="docs-button" onclick="openDocumentation()">
+            <span class="material-icons">description</span>
+            <span class="tooltip">Documentatie
+                <span class="tooltiptext">Opent in nieuw tabblad</span>
+            </span>
+        </button>
     </header>
-    <div class="info-bar">
-        <div class="info-group">
-            <span>Aanvraagnummer: <strong>2025-00087</strong></span>
-            <span>Indieningsdatum: <strong>02-06-2025</strong></span>
-            <span>Status: <span class="status-badge status-nieuw" id="main-status">Nieuw</span></span>
-        </div>
-        <div class="info-group">
-            <span>Aanvrager: <strong>Stichting Virtueel Geduld</strong></span>
-            <span>Contact: <strong>jane.doe@email.nl</strong></span>
-        </div>
+    
+<div class="info-bar">
+    <div class="info-group">
+        <span>Aanvraagnummer: <strong>2025-00087</strong></span>
+        <span>Indieningsdatum: <strong>02-06-2025</strong></span>
+        <span>Status: <span class="status-badge status-nieuw" id="main-status">Nieuw</span></span>
     </div>
-    <div class="dashboard-section">
-        
-        <!-- Metrics Bar -->
-        <div class="metrics-bar">
-            <div class="metric-card">
-                <span class="material-icons metric-icon">assignment</span>
-                <div>
-                    <div class="metric-label">Aantal Thema’s</div>
-                    <div class="metric-value" id="themaCount">4</div>
+    <div class="info-group">
+        <span>Aanvrager: <strong>Stichting Virtueel Geduld</strong></span>
+        <span>Contact: <strong>jane.doe@email.nl</strong></span>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <div class="dashboard-flex">
+        <div class="left-col">
+            <div class="section-card overview-card">
+                <div class="section-header">
+                    <span class="material-icons">info</span>Overzicht
                 </div>
-            </div>
-            <div class="metric-card">
-                <span class="material-icons metric-icon" style="color:var(--danger);">warning</span>
-                <div>
-                    <div class="metric-label">Hoog risico thema’s</div>
-                    <div class="metric-value" id="highRiskCount">1</div>
-                </div>
-            </div>
-            <div class="metric-card">
-                <span class="material-icons metric-icon" style="color:var(--medium);">hourglass_top</span>
-                <div>
-                    <div class="metric-label">Nog niet beoordeeld</div>
-                    <div class="metric-value" id="notReviewedCount">4</div>
-                </div>
-            </div>
-            <div class="metric-card">
-                <span class="material-icons metric-icon" style="color:var(--success);">how_to_reg</span>
-                <div>
-                    <div class="metric-label">Goedgekeurd</div>
-                    <div class="metric-value" id="approvedCount">0</div>
-                </div>
-            </div>
-        </div>
-        <div class="dashboard-flex">
-            <!-- LEFT COL -->
-            <div class="left-col">
-                <!-- Overzicht & Statusgeschiedenis -->
-                <div class="section-card">
-                    <div class="section-header">
-                        <span class="material-icons">info</span>Overzicht & Statusgeschiedenis
+                
+                <div class="overview-grid">
+                    <div class="process-status">
+                        <div class="process-item">
+                            <div class="process-label">AT</div>
+                            <div class="process-icon" id="at-status">⏳</div>
+                            <div class="process-status-text" id="at-text">In behandeling</div>
+                            <select class="process-select" id="at-select" onchange="updateProcessStatus('at', this.value)">
+                                <option value="pending">In behandeling</option>
+                                <option value="completed">Afgerond</option>
+                                <option value="not-started">Niet gestart</option>
+                            </select>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-label">KIT</div>
+                            <div class="process-icon" id="kit-status">❌</div>
+                            <div class="process-status-text" id="kit-text">Nog niet ontvangen</div>
+                            <select class="process-select" id="kit-select" onchange="updateProcessStatus('kit', this.value)">
+                                <option value="not-received">Niet ontvangen</option>
+                                <option value="received">Ontvangen</option>
+                                <option value="pending">In behandeling</option>
+                            </select>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-label">LSR</div>
+                            <div class="process-icon" id="lsr-status">❌</div>
+                            <div class="process-status-text" id="lsr-text">Nog niet gecheckt</div>
+                            <select class="process-select" id="lsr-select" onchange="updateProcessStatus('lsr', this.value)">
+                                <option value="not-checked">Niet gecheckt</option>
+                                <option value="checked">Gecheckt</option>
+                                <option value="pending">In behandeling</option>
+                            </select>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-label">DNB</div>
+                            <div class="process-icon" id="dnb-status">✅</div>
+                            <div class="process-status-text" id="dnb-text">Ontvangen</div>
+                            <select class="process-select" id="dnb-select" onchange="updateProcessStatus('dnb', this.value)">
+                                <option value="received">Ontvangen</option>
+                                <option value="not-received">Niet ontvangen</option>
+                                <option value="pending">In behandeling</option>
+                            </select>
+                        </div>
                     </div>
-                    <div id="statusHistory" class="status-history"></div>
-                    <div class="filters">
-                        <label for="filter-theme">Filter thema:</label>
-                        <select id="filter-theme">
-                            <option value="all">Alle</option>
-                            <option value="Governance">Governance</option>
-                            <option value="IT">IT</option>
-                            <option value="Risk Management">Risk Management</option>
-                            <option value="Compliance">Compliance</option>
-                        </select>
-                        <label for="filter-risk">Risico:</label>
-                        <select id="filter-risk">
-                            <option value="all">Alle</option>
-                            <option value="Hoog">Hoog</option>
-                            <option value="Midden">Midden</option>
-                            <option value="Laag">Laag</option>
-                        </select>
-                        <label for="filter-status">Beoordeling:</label>
-                        <select id="filter-status">
-                            <option value="all">Alle</option>
-                            <option value="Goedgekeurd">Goedgekeurd</option>
-                            <option value="Afgekeurd">Afgekeurd</option>
-                            <option value="Nog niet beoordeeld">Nog niet beoordeeld</option>
-                        </select>
+                    
+                    <div class="deadline-timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-label">Datum ontvangst:</span>
+                            <span class="timeline-value" id="receive-date">02-06-2025</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-label">Normdatum:</span>
+                            <span class="timeline-value" id="deadline-date">02-08-2025</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-label">Resterend:</span>
+                            <span class="timeline-value" id="remaining-days">Nog 52 dagen</span>
+                        </div>
+                        <div class="timeline-progress">
+                            <div class="timeline-progress-bar" id="timeline-bar"></div>
+                        </div>
+                        <div class="timeline-warning" id="timeline-warning">
+                            ⚠ Deadline nadert! Nog 10 dagen over.
+                        </div>
                     </div>
                 </div>
-                <!-- Bookmark -->
-                <div class="bookmark-bar">
-                    <span>Thema:</span>
-                    <button class="bookmark-btn" onclick="scrollToAccordion('Governance')">Governance</button>
-                    <button class="bookmark-btn" onclick="scrollToAccordion('IT')">IT</button>
-                    <button class="bookmark-btn" onclick="scrollToAccordion('Risk Management')">Risk Management</button>
-                    <button class="bookmark-btn" onclick="scrollToAccordion('Compliance')">Compliance</button>
-                </div>
-                <!-- Accordion Thema's -->
-                <div id="accordion" class="accordion"></div>
-                <!-- Warning: niet alle thema's beoordeeld -->
-                <div id="notReviewedWarning" class="warning" style="display:none;">
-                    Niet alle thema’s zijn beoordeeld! Controleer het werkprogramma.
-                </div>
-                <!-- Vervolgactie Section -->
-                <div id="vervolgactieSection" class="vervolg-section" style="display:none;">
-                    <div class="vervolg-header">
-                        <span class="material-icons">question_answer</span> Vervolgactie: Stel een vraag aan de aanvrager
-                    </div>
-                    <div class="vervolg-form">
+                
+                <div class="metrics-bar">
+                    <div class="metric-card">
+                        <span class="material-icons metric-icon">assignment</span>
                         <div>
-                            <label for="vervolgQuestion">Uw vraag:</label>
-                            <textarea id="vervolgQuestion" placeholder="Typ hier uw vraag aan de aanvrager..."></textarea>
-                        </div>
-                        <div class="vervolg-actions">
-                            <button class="vervolg-btn vervolg-send-btn" onclick="sendVervolgQuestion()">Verstuur vraag</button>
-                            <button class="vervolg-btn vervolg-cancel-btn" onclick="cancelVervolgQuestion()">Annuleren</button>
+                            <div class="metric-label">Aantal Thema's</div>
+                            <div class="metric-value" id="themaCount">4</div>
                         </div>
                     </div>
-                    <div id="vervolgResponse" class="vervolg-response">
-                        <div class="vervolg-header">
-                            <span class="material-icons">assignment_turned_in</span> Ontvangen antwoord
-                        </div>
-                        <div id="vervolgAnswerText"></div>
-                        <div class="vervolg-actions" style="margin-top:1em;">
-                            <button class="vervolg-btn" onclick="acceptAnswer()">Antwoord accepteren</button>
-                            <button class="vervolg-btn vervolg-cancel-btn" onclick="requestClarification()">Verduidelijking vragen</button>
+                    <div class="metric-card">
+                        <span class="material-icons metric-icon warning-icon">warning</span>
+                        <div>
+                            <div class="metric-label">Hoog risico</div>
+                            <div class="metric-value" id="highRiskCount">1</div>
                         </div>
                     </div>
-                    <div id="vervolgHistory" class="vervolg-history">
-                        <div class="vervolg-header">
-                            <span class="material-icons">history</span> Geschiedenis van vervolgacties
+                    <div class="metric-card">
+                        <span class="material-icons metric-icon pending-icon">hourglass_top</span>
+                        <div>
+                            <div class="metric-label">Niet beoordeeld</div>
+                            <div class="metric-value" id="notReviewedCount">4</div>
                         </div>
-                        <div id="vervolgHistoryContent"></div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="material-icons metric-icon success-icon">how_to_reg</span>
+                        <div>
+                            <div class="metric-label">Goedgekeurd</div>
+                            <div class="metric-value" id="approvedCount">0</div>
+                        </div>
                     </div>
                 </div>
-                <!-- Go/No-Go indicator -->
+                
+                <div class="status-history-accordion">
+                    <div class="accordion-header" onclick="toggleStatusHistory()">
+                        <span class="material-icons expand-icon">chevron_right</span>
+                        <span class="material-icons">history</span>
+                        Statusgeschiedenis
+                    </div>
+                    <div class="accordion-content" id="statusHistory"></div>
+                </div>
+                
+                <div class="filters">
+                    <label for="filter-theme">Filter thema:</label>
+                    <select id="filter-theme">
+                        <option value="all">Alle</option>
+                        <option value="Governance">Governance</option>
+                        <option value="IT">IT</option>
+                        <option value="Risk Management">Risk Management</option>
+                        <option value="Compliance">Compliance</option>
+                    </select>
+                    
+                    <label for="filter-risk">Risico:</label>
+                    <select id="filter-risk">
+                        <option value="all">Alle</option>
+                        <option value="Hoog">Hoog</option>
+                        <option value="Midden">Midden</option>
+                        <option value="Laag">Laag</option>
+                    </select>
+                    
+                    <label for="filter-status">Beoordeling:</label>
+                    <select id="filter-status">
+                        <option value="all">Alle</option>
+                        <option value="Goedgekeurd">Goedgekeurd</option>
+                        <option value="Afgekeurd">Afgekeurd</option>
+                        <option value="Nog niet beoordeeld">Nog niet beoordeeld</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="bookmark-bar">
+                <span>Thema:</span>
+                <button class="bookmark-btn" onclick="scrollToAccordion('Governance')">Governance</button>
+                <button class="bookmark-btn" onclick="scrollToAccordion('IT')">IT</button>
+                <button class="bookmark-btn" onclick="scrollToAccordion('Risk Management')">Risk Management</button>
+                <button class="bookmark-btn" onclick="scrollToAccordion('Compliance')">Compliance</button>
+            </div>
+            
+            <div id="accordion" class="accordion"></div>
+            
+            <div id="notReviewedWarning" class="warning" style="display:none;">
+                Niet alle thema's zijn beoordeeld! Controleer het werkprogramma.
+            </div>
+            
+            <div id="vervolgactieSection" class="vervolg-section" style="display:none;">
+                <div class="vervolg-header">
+                    <span class="material-icons">question_answer</span> Vervolgactie: Stel een vraag aan de aanvrager
+                </div>
+                <div class="vervolg-form">
+                    <div>
+                        <label for="vervolgQuestion">Uw vraag:</label>
+                        <textarea id="vervolgQuestion" placeholder="Typ hier uw vraag aan de aanvrager..."></textarea>
+                    </div>
+                    <div class="vervolg-actions">
+                        <button class="vervolg-btn vervolg-send-btn" onclick="sendVervolgQuestion()">Verstuur vraag</button>
+                        <button class="vervolg-btn vervolg-cancel-btn" onclick="cancelVervolgQuestion()">Annuleren</button>
+                    </div>
+                </div>
+                <div id="vervolgResponse" class="vervolg-response">
+                    <div class="vervolg-header">
+                        <span class="material-icons">assignment_turned_in</span> Ontvangen antwoord
+                    </div>
+                    <div id="vervolgAnswerText"></div>
+                    <div class="vervolg-actions" style="margin-top:1em;">
+                        <button class="vervolg-btn" onclick="acceptAnswer()">Antwoord accepteren</button>
+                        <button class="vervolg-btn vervolg-cancel-btn" onclick="requestClarification()">Verduidelijking vragen</button>
+                    </div>
+                </div>
+                <div id="vervolgHistory" class="vervolg-history">
+                    <div class="vervolg-header">
+                        <span class="material-icons">history</span> Geschiedenis van vervolgacties
+                    </div>
+                    <div id="vervolgHistoryContent"></div>
+                </div>
+            </div>
+            
+            <div class="decision-container">
                 <div class="go-indicator">
                     <span class="go-status nogo" id="goIndicator">NO GO</span>
                 </div>
-                <!-- Final Decision Section -->
+                
                 <div class="final-decision">
                     <div class="decision-title">Definitieve beslissing</div>
                     <p>Na beoordeling van alle thema's kunt u hier de definitieve beslissing nemen:</p>
+                    
+                    <div class="decision-notes">
+                        <label for="decisionNotes">Aanvullende opmerkingen:</label>
+                        <textarea id="decisionNotes" placeholder="Voeg hier aanvullende opmerkingen toe, zoals voorschriften/beperkingen, red flags voor doorlopend toezicht, overzicht bestaande fondsen en AuM's, of relevante aandachtspunten uit het feitenoverzicht." maxlength="1000"></textarea>
+                        <div class="char-counter"><span id="charCount">0</span>/1000 tekens</div>
+                    </div>
+                    
                     <div class="decision-options">
                         <button class="decision-btn approve-btn" onclick="showConfirmation('approve')">Vergunning verlenen</button>
                         <button class="decision-btn reject-btn" onclick="showConfirmation('reject')">Vergunning weigeren</button>
@@ -749,29 +250,175 @@
                     </div>
                 </div>
             </div>
-            <!-- RIGHT COL -->
-            <div class="right-col">
-                <div class="section-card">
-                    <div class="section-header">
-                        <span class="material-icons">assessment</span>Risico-overzicht
-                        <span class="spacer"></span>
-                    </div>
-                    <div class="charts-row">
-                        <canvas id="riskBarChart" class="risk-bar-chart"></canvas>
-                        <canvas id="spiderDiagram" class="spider-diagram"></canvas>
-                    </div>
-                    <div class="legend">
-                        <span><span class="legend-box bar-red"></span>Hoog</span>
-                        <span><span class="legend-box bar-orange"></span>Midden</span>
-                        <span><span class="legend-box bar-green"></span>Laag</span>
-                    </div>
+        </div>
+        
+        <div class="right-col">
+            <div class="section-card risk-overview">
+                <div class="section-header">
+                    <span class="material-icons">assessment</span>Risico-overzicht
+                </div>
+                <div class="charts-row">
+                    <canvas id="riskBarChart" class="risk-bar-chart"></canvas>
+                    <canvas id="spiderDiagram" class="spider-diagram"></canvas>
+                </div>
+                <div class="legend">
+                    <span><span class="legend-box bar-red"></span>Hoog</span>
+                    <span><span class="legend-box bar-orange"></span>Midden</span>
+                    <span><span class="legend-box bar-green"></span>Laag</span>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Chart.js for spider and bar chart (CDN) -->
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Process status data
+        const processStatus = {
+            at: { status: 'pending', text: 'In behandeling', lastUpdate: '05-06-2025' },
+            kit: { status: 'not-received', text: 'Nog niet ontvangen', lastUpdate: '' },
+            lsr: { status: 'not-checked', text: 'Nog niet gecheckt', lastUpdate: '' },
+            dnb: { status: 'received', text: 'Ontvangen', lastUpdate: '10-06-2025' }
+        };
+
+        // Function to update process status
+        function updateProcessStatus(process, newStatus) {
+            processStatus[process].status = newStatus;
+            processStatus[process].lastUpdate = new Date().toLocaleDateString('nl-NL');
+            renderProcessStatus();
+            addStatusHistory(`${process.toUpperCase()} status gewijzigd naar: ${getStatusText(process, newStatus)}`);
+        }
+
+        // Helper function to get status text
+        function getStatusText(process, status) {
+            const statusTexts = {
+                at: {
+                    'pending': 'In behandeling',
+                    'completed': 'Afgerond',
+                    'not-started': 'Niet gestart'
+                },
+                kit: {
+                    'not-received': 'Niet ontvangen',
+                    'received': 'Ontvangen',
+                    'pending': 'In behandeling'
+                },
+                lsr: {
+                    'not-checked': 'Niet gecheckt',
+                    'checked': 'Gecheckt',
+                    'pending': 'In behandeling'
+                },
+                dnb: {
+                    'received': 'Ontvangen',
+                    'not-received': 'Niet ontvangen',
+                    'pending': 'In behandeling'
+                }
+            };
+            return statusTexts[process][status] || status;
+        }
+
+        // Updated renderProcessStatus function
+        function renderProcessStatus() {
+            // AT Status
+            const atEl = document.getElementById('at-status');
+            const atTextEl = document.getElementById('at-text');
+            const atSelect = document.getElementById('at-select');
+            
+            if (processStatus.at.status === 'completed') {
+                atEl.textContent = '✅';
+                atEl.style.color = 'var(--success)';
+                atTextEl.textContent = 'Afgerond (' + processStatus.at.lastUpdate + ')';
+                atSelect.value = 'completed';
+            } else if (processStatus.at.status === 'pending') {
+                atEl.textContent = '⏳';
+                atEl.style.color = 'var(--medium)';
+                atTextEl.textContent = 'In behandeling';
+                atSelect.value = 'pending';
+            } else {
+                atEl.textContent = '❌';
+                atEl.style.color = 'var(--danger)';
+                atTextEl.textContent = 'Niet gestart';
+                atSelect.value = 'not-started';
+            }
+            
+            // KIT Status
+            const kitEl = document.getElementById('kit-status');
+            const kitTextEl = document.getElementById('kit-text');
+            const kitSelect = document.getElementById('kit-select');
+            
+            if (processStatus.kit.status === 'received') {
+                kitEl.textContent = '✅';
+                kitEl.style.color = 'var(--success)';
+                kitTextEl.textContent = 'Ontvangen (' + processStatus.kit.lastUpdate + ')';
+                kitSelect.value = 'received';
+            } else if (processStatus.kit.status === 'pending') {
+                kitEl.textContent = '⏳';
+                kitEl.style.color = 'var(--medium)';
+                kitTextEl.textContent = 'In behandeling';
+                kitSelect.value = 'pending';
+            } else {
+                kitEl.textContent = '❌';
+                kitEl.style.color = 'var(--danger)';
+                kitTextEl.textContent = 'Nog niet ontvangen';
+                kitSelect.value = 'not-received';
+            }
+            
+            // LSR Status
+            const lsrEl = document.getElementById('lsr-status');
+            const lsrTextEl = document.getElementById('lsr-text');
+            const lsrSelect = document.getElementById('lsr-select');
+            
+            if (processStatus.lsr.status === 'checked') {
+                lsrEl.textContent = '✅';
+                lsrEl.style.color = 'var(--success)';
+                lsrTextEl.textContent = 'Gecheckt (' + processStatus.lsr.lastUpdate + ')';
+                lsrSelect.value = 'checked';
+            } else if (processStatus.lsr.status === 'pending') {
+                lsrEl.textContent = '⏳';
+                lsrEl.style.color = 'var(--medium)';
+                lsrTextEl.textContent = 'In behandeling';
+                lsrSelect.value = 'pending';
+            } else {
+                lsrEl.textContent = '❌';
+                lsrEl.style.color = 'var(--danger)';
+                lsrTextEl.textContent = 'Nog niet gecheckt';
+                lsrSelect.value = 'not-checked';
+            }
+            
+            // DNB Status
+            const dnbEl = document.getElementById('dnb-status');
+            const dnbTextEl = document.getElementById('dnb-text');
+            const dnbSelect = document.getElementById('dnb-select');
+            
+            if (processStatus.dnb.status === 'received') {
+                dnbEl.textContent = '✅';
+                dnbEl.style.color = 'var(--success)';
+                dnbTextEl.textContent = 'Ontvangen (' + processStatus.dnb.lastUpdate + ')';
+                dnbSelect.value = 'received';
+            } else if (processStatus.dnb.status === 'pending') {
+                dnbEl.textContent = '⏳';
+                dnbEl.style.color = 'var(--medium)';
+                dnbTextEl.textContent = 'In behandeling';
+                dnbSelect.value = 'pending';
+            } else {
+                dnbEl.textContent = '❌';
+                dnbEl.style.color = 'var(--danger)';
+                dnbTextEl.textContent = 'Nog niet ontvangen';
+                dnbSelect.value = 'not-received';
+            }
+        }
+
+        // Function to add status history entry
+        function addStatusHistory(text) {
+            statusHistory.push({
+                status: text,
+                date: new Date().toLocaleDateString('nl-NL'),
+                by: "Beoordelaar"
+            });
+            renderStatusHistory();
+        }
+
+        // Rest of your existing JavaScript code...
+        // (All the other functions from your original script should remain the same)
         // Placeholder DATA -- you can easily map this to an API or back-end
         const THEMES = [
             {
@@ -829,6 +476,13 @@
         let statusHistory = [
             { status: 'Nieuw', date: '02-06-2025', by: 'Systeem' }
         ];
+        
+        // Deadline data (Feature C)
+        const deadlineData = {
+            receiveDate: '02-06-2025',
+            deadlineDate: '02-08-2025', // 2 months later
+            daysRemaining: 52 // Will be calculated dynamically
+        };
 
         // --- Render Metrics ---
         function renderMetrics() {
@@ -850,6 +504,79 @@
             ).join('');
             document.getElementById('statusHistory').innerHTML =
                 '<div class="status-history-title">Statusgeschiedenis:</div>' + hist;
+        }
+        
+        // Toggle status history visibility
+        function toggleStatusHistory() {
+            const content = document.getElementById('statusHistory');
+            const icon = document.querySelector('.status-history-accordion .expand-icon');
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+            icon.textContent = content.style.display === 'none' ? 'chevron_right' : 'expand_more';
+        }
+        
+        // NEW: Calculate and render deadline timeline (Feature C)
+        function renderDeadlineTimeline() {
+            // Set dates
+            document.getElementById('receive-date').textContent = deadlineData.receiveDate;
+            document.getElementById('deadline-date').textContent = deadlineData.deadlineDate;
+            
+            // Calculate days remaining (simple example - in a real app you'd use actual date diff)
+            const daysRemaining = deadlineData.daysRemaining;
+            document.getElementById('remaining-days').textContent = `Nog ${daysRemaining} dagen`;
+            
+            // Calculate percentage (assuming total period is 60 days)
+            const percentage = Math.min(100, Math.max(0, ((60 - daysRemaining) / 60) * 100));
+            const progressBar = document.getElementById('timeline-bar');
+            progressBar.style.width = `${percentage}%`;
+            
+            // Update color based on urgency
+            const warningEl = document.getElementById('timeline-warning');
+            if (daysRemaining <= 10) {
+                progressBar.style.backgroundColor = 'var(--warning-orange)';
+                if (daysRemaining <= 5) {
+                    progressBar.style.backgroundColor = 'var(--danger)';
+                }
+                warningEl.style.display = 'block';
+                warningEl.textContent = `⚠ Deadline nadert! Nog ${daysRemaining} dagen over.`;
+                if (daysRemaining <= 3) {
+                    warningEl.style.color = 'var(--danger)';
+                    warningEl.textContent = `⚠ Dringend! Deadline over ${daysRemaining} dagen!`;
+                }
+            } else {
+                progressBar.style.backgroundColor = 'var(--success)';
+                warningEl.style.display = 'none';
+            }
+        }
+        
+        // NEW: Handle decision notes character count (Feature A)
+        function setupDecisionNotes() {
+            const textarea = document.getElementById('decisionNotes');
+            const charCount = document.getElementById('charCount');
+            
+            textarea.addEventListener('input', function() {
+                const remaining = 1000 - this.value.length;
+                charCount.textContent = this.value.length;
+                
+                // Auto-save to localStorage (simulated)
+                localStorage.setItem('decisionNotes', this.value);
+            });
+            
+            // Load saved notes if any
+            const savedNotes = localStorage.getItem('decisionNotes');
+            if (savedNotes) {
+                textarea.value = savedNotes;
+                charCount.textContent = savedNotes.length;
+            }
+        }
+        
+        // NEW: Open documentation (Feature D)
+        function openDocumentation() {
+            // In a real app, this would open a modal or link to external docs
+            const docUrl = "https://example.com/documentatie-vergunningen";
+            window.open(docUrl, '_blank');
+            
+            // Alternatively, you could show a modal with embedded content
+            // showDocumentationModal();
         }
 
         // --- Filtering helpers ---
@@ -1379,6 +1106,9 @@
             updateGoIndicator();
             renderMetrics();
             renderStatusHistory();
+            renderProcessStatus();
+            renderDeadlineTimeline();
+            setupDecisionNotes();
         }
         renderAll();
 
