@@ -157,10 +157,11 @@
                     
                     <label for="filter-risk">Risico:</label>
                     <select id="filter-risk">
-                        <option value="all">Alle</option>
                         <option value="Hoog">Hoog</option>
                         <option value="Midden">Midden</option>
                         <option value="Laag">Laag</option>
+                        <option value="all">Alle</option>
+
                     </select>
                     
                     <label for="filter-status">Beoordeling:</label>
@@ -435,7 +436,7 @@
             {
                 name: "IT",
                 icon: "computer",
-                risk: "Midden",
+                risk: "Hoog",
                 riskScore: 55,
                 context: "Beheer, beveiliging en continuïteit van IT-systemen.",
                 applicantAnswers: [
@@ -446,7 +447,7 @@
             {
                 name: "Risk Management",
                 icon: "report_problem",
-                risk: "Laag",
+                risk: "Hoog",
                 riskScore: 28,
                 context: "Proces voor identificatie, beoordeling en beheersing van risico's.",
                 applicantAnswers: [
@@ -457,14 +458,40 @@
             {
                 name: "Compliance",
                 icon: "gavel",
-                risk: "Midden",
+                risk: "Hoog",
                 riskScore: 45,
                 context: "Naleving van relevante wet- en regelgeving.",
                 applicantAnswers: [
                     { question: "Voldoet u aan relevante wetgeving?", answer: "Grotendeels, sommige punten aandacht nodig.", score: 3 },
                     { question: "Zijn compliance-trainingen verplicht?", answer: "Niet voor alle medewerkers.", score: 2 }
                 ]
-            }
+            },
+                        {
+                name: "Beloningsbeleid",
+                icon: "attach_money",
+                risk: "Laag",
+                riskScore: 20,
+                context: "Naleving van relevante wet- en regelgeving.",
+                applicantAnswers: [
+        { question: "Is het beloningsbeleid transparant voor alle medewerkers?", answer: "Ja, jaarlijks gecommuniceerd via interne nieuwsbrief.", score: 4 },
+        { question: "Worden bonussen eerlijk en volgens vooraf vastgestelde criteria toegekend?", answer: "Ja, op basis van KPI’s en jaarlijkse evaluaties.", score: 5 },
+        { question: "Zijn er procedures voor het aanpassen van salarissen?", answer: "Ja, met input van HR en directie.", score: 4 }
+                ]
+            },
+            {
+    name: "Wwft / AML",
+    icon: "visibility", // Because someone’s always watching the money flow
+    risk: "Middel",
+    riskScore: 60,
+    context: "Beleid en maatregelen ter voorkoming van witwassen en terrorismefinanciering.",
+    applicantAnswers: [
+        { question: "Heeft uw organisatie een Wwft-compliant beleid?", answer: "Ja, jaarlijks geüpdatet en getoetst.", score: 5 },
+        { question: "Worden medewerkers getraind in het herkennen van verdachte transacties?", answer: "Ja, verplichte trainingen voor risicoposities.", score: 4 },
+        { question: "Zijn er procedures voor melding van ongebruikelijke transacties?", answer: "Ja, directe rapportage aan compliance officer.", score: 5 }
+    ]
+}
+
+            
         ];
 
         // Vervolgactie history
